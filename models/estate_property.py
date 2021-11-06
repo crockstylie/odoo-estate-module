@@ -1,4 +1,7 @@
+import datetime
+
 from odoo import fields, models
+from dateutil.relativedelta import relativedelta
 
 
 class EstateProperty(models.Model):
@@ -8,10 +11,21 @@ class EstateProperty(models.Model):
     name = fields.Char('Name', required=True)
     description = fields.Text('Description')
     postcode = fields.Char('Postcode')
-    date_availability = fields.Date('Availability date')
+    date_availability = fields.Date(
+        string='Availability date',
+        copy=False,
+        default=fields.Date.today() + relativedelta(months=3)
+    )
     expected_price = fields.Float('Expected price', required=True)
-    selling_price = fields.Float('Selling price')
-    bedrooms = fields.Integer('Bedrooms')
+    selling_price = fields.Float(
+        string='Selling price',
+        readonly=True,
+        copy=False
+    )
+    bedrooms = fields.Integer(
+        string='Bedrooms',
+        default=2
+    )
     living_area = fields.Integer('Living area')
     facades = fields.Integer('Facades')
     garage = fields.Boolean('Garage')
@@ -19,6 +33,29 @@ class EstateProperty(models.Model):
     garden_area = fields.Integer('Garden area')
     garden_orientation = fields.Selection(
         string='Garden orientation',
-        selection=[('north', 'North'), ('south', 'South'), ('east', 'East'), ('west', 'West')],
+        selection=[
+            ('north', 'North'),
+            ('south', 'South'),
+            ('east', 'East'),
+            ('west', 'West')
+        ],
+        help='Garden orientation is used to describe the garden orientation'
+    )
+    active = fields.Boolean(
+        string='Active',
+        default=True
+    )
+    state = fields.Selection(
+        string='State',
+        selection=[
+            ('new', 'New'),
+            ('offer_received', 'Offer Received'),
+            ('offer_accepted', 'Offer Accepted'),
+            ('sold', 'Sold'),
+            ('canceled', 'Canceled')
+        ],
+        copy=False,
+        default='new',
+        required=True,
         help='Garden orientation is used to describe the garden orientation'
     )
