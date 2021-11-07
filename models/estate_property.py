@@ -60,3 +60,4 @@ class EstateProperty(models.Model):
         help='Garden orientation is used to describe the garden orientation'
     )
     property_type_id = fields.Many2one('estate.property.type', string='Property Type')
+    property_tag_ids = fields.Many2many('estate.property.tag', string='Property Tag')
