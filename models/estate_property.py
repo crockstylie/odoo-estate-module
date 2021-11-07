@@ -56,8 +56,8 @@ class EstateProperty(models.Model):
         ],
         copy=False,
         default='new',
-        required=True,
-        help='Garden orientation is used to describe the garden orientation'
+        required=True
     )
     property_type_id = fields.Many2one('estate.property.type', string='Property Type')
-    property_tag_ids = fields.Many2many('estate.property.tag', string='Property Tag')
+    property_tag_ids = fields.Many2many('estate.property.tag', string='Property Tags')
+    property_offer_ids = fields.One2many('estate.property.offer', 'property_id', string='Property Offers')
