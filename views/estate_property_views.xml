@@ -82,6 +82,14 @@
                         <page string="Offers">
                             <field name="property_offer_ids"/>
                         </page>
+                        <page string="Other Info">
+                            <group>
+                                <group>
+                                    <field name="user_id"/>
+                                    <field name="buyer_id"/>
+                                </group>
+                            </group>
+                        </page>
                     </notebook>
                 </sheet>
             </form>

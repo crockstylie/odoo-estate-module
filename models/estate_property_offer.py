@@ -9,7 +9,8 @@ class EstatePropertyOffer(models.Model):
     _description = "Estate property offer"
 
     price = fields.Float(
-        string='Price'
+        string='Price',
+        required=True
     )
     validity = fields.Integer(
         string="Validity (days)",
@@ -31,11 +32,13 @@ class EstatePropertyOffer(models.Model):
     )
     partner_id = fields.Many2one(
         'res.partner',
-        string="Partner ID"
+        string="Partner",
+        required=True
     )
     property_id = fields.Many2one(
         'estate.property',
-        string="Property ID"
+        string="Property",
+        required=True
     )
 
     @api.depends("create_date", "validity")
@@ -61,6 +64,7 @@ class EstatePropertyOffer(models.Model):
             {
                 "state": "offer_accepted",
                 "selling_price": self.price,
+                "buyer_id": self.partner_id.id
             }
         )
 
