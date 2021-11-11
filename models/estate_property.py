@@ -7,6 +7,18 @@ from odoo.exceptions import UserError
 class EstateProperty(models.Model):
     _name = "estate.property"
     _description = "Property of the Estate Duh !!!"
+    _sql_constraints = [
+        (
+            'check_expected_price',
+            'CHECK(expected_price > 0)',
+            'The expected price must be strictly positive.'
+        ),
+        (
+            'check_selling_price',
+            'CHECK(selling_price >= 0)',
+            'The selling price must be positive.'
+        )
+    ]
 
     name = fields.Char('Name', required=True)
     description = fields.Text('Description')
@@ -16,7 +28,10 @@ class EstateProperty(models.Model):
         copy=False,
         default=fields.Date.today() + relativedelta(months=3)
     )
-    expected_price = fields.Float('Expected price', required=True)
+    expected_price = fields.Float(
+        string='Expected price',
+        required=True
+    )
     selling_price = fields.Float(
         string='Selling price',
         readonly=True,
