@@ -17,4 +17,9 @@ class EstatePropertyType(models.Model):
         string='Name',
         required=True
     )
+    sequence = fields.Integer(
+        string="Sequence",
+        default=10
+    )
+
     property_ids = fields.One2many('estate.property', 'property_type_id', string='Properties')
