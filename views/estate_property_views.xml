@@ -48,7 +48,8 @@
                     <button
                         name="action_cancel"
                         type="object"
-                        string="Cancel"/>
+                        string="Cancel"
+                        states="new,offer_received,offer_accepted"/>
                     <field
                         name="state"
                         widget="statusbar"
