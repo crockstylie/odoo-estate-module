@@ -38,6 +38,7 @@ class EstatePropertyOffer(models.Model):
         copy=False,
         default=False
     )
+
     partner_id = fields.Many2one(
         'res.partner',
         string="Partner",
@@ -47,6 +48,12 @@ class EstatePropertyOffer(models.Model):
         'estate.property',
         string="Property",
         required=True
+    )
+    property_type_id = fields.Many2one(
+        'estate.property.type',
+        related="property_id.property_type_id",
+        string="Property Type",
+        store=True
     )
 
     @api.depends("create_date", "validity")
