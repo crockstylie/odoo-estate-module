@@ -22,13 +22,16 @@ class EstateProperty(models.Model):
         )
     ]
 
-    name = fields.Char('Name', required=True)
+    def _default_date_availability(self):
+        return fields.Date.context_today(self) + relativedelta(months=3)
+
+    name = fields.Char('Title', required=True)
     description = fields.Text('Description')
     postcode = fields.Char('Postcode')
     date_availability = fields.Date(
-        string='Availability date',
-        copy=False,
-        default=fields.Date.today() + relativedelta(months=3)
+        string='Available from',
+        default=lambda self: self._default_date_availability(),
+        copy=False
     )
     expected_price = fields.Float(
         string='Expected price',
@@ -36,8 +39,8 @@ class EstateProperty(models.Model):
     )
     selling_price = fields.Float(
         string='Selling price',
-        readonly=True,
-        copy=False
+        copy=False,
+        readonly=True
     )
     bedrooms = fields.Integer(
         string='Bedrooms',
@@ -55,9 +58,9 @@ class EstateProperty(models.Model):
             ('south', 'South'),
             ('east', 'East'),
             ('west', 'West')
-        ],
-        help='Garden orientation is used to describe the garden orientation'
+        ]
     )
+
     active = fields.Boolean(
         string='Active',
         default=True
@@ -75,6 +78,7 @@ class EstateProperty(models.Model):
         default='new',
         required=True
     )
+
     property_type_id = fields.Many2one('estate.property.type', string='Property Type')
     user_id = fields.Many2one(
         "res.users",
@@ -83,9 +87,14 @@ class EstateProperty(models.Model):
         copy=False,
         default=lambda self: self.env.user
     )
-    buyer_id = fields.Many2one("res.partner", string="Buyer", readonly=True, copy=False)
+    buyer_id = fields.Many2one(
+        "res.partner",
+        string="Buyer",
+        readonly=True,
+        copy=False)
     property_tag_ids = fields.Many2many('estate.property.tag', string='Property Tags')
     property_offer_ids = fields.One2many('estate.property.offer', 'property_id', string='Property Offers')
+
     total_area = fields.Integer(
         string="Total area (m2)",
         compute="_compute_total_area",
@@ -94,8 +103,8 @@ class EstateProperty(models.Model):
 
     @api.depends("living_area", "garden_area")
     def _compute_total_area(self):
-        for record in self:
-            record.total_area = record.living_area + record.garden_area
+        for prop in self:
+            prop.total_area = prop.living_area + prop.garden_area
 
     @api.depends("property_offer_ids.price")
     def _compute_best_price(self):

@@ -77,7 +77,7 @@ class EstatePropertyOffer(models.Model):
         )
 
     def action_refuse(self):
-        self.write(
+        return self.write(
             {
                 "state": "refused"
             }
